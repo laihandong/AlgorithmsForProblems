@@ -66,6 +66,65 @@ public:
 };
 ```
 
+```c#
+//方法一：暴力法
+public int[] TwoSum(int[] nums, int target)
+{
+    for (int i = 0; i < nums.Length; i++)
+    {
+        for (int j = i + 1; j < nums.Length; j++)
+        {
+            if (nums[i] + nums[j] == target)
+            {
+                return new int[] { i, j };
+            }
+        }
+    }
+    return new int[] { 0, 0 };
+}
+
+
+
+
+//方法二：两遍哈希表
+public int[] TwoSum(int[] nums, int target)
+{
+    Dictionary<int, int> kvs = new Dictionary<int, int>();
+    for (int i = 0; i < nums.Length; i++)
+    {
+        //需要对重复值进行判断；因为结果的唯一，所以若有重复值，且答案中包含了重复值的话，说明必有 重复值*2==target; 否则直接忽略重复值即可
+		//第一次迭代中，我们将每个元素的值和它的索引添加到表中
+        if (kvs.ContainsKey(nums[i]))
+        {
+            if (nums[i] * 2 == target)
+            {
+                return new int[] { i, kvs[nums[i]] };
+            }
+        }
+        else
+        {
+            kvs.Add(nums[i], i);
+        }
+    }
+    //在第二次迭代中，我们将检查每个元素所对应的目标元素（target - nums[i]）是否存在于表中
+    for (int i = 0; i < nums.Length; i++)
+    {
+    	int complement = target - nums[i];
+        if (kvs.ContainsKey(complement) && kvs[complement] != i)
+        {
+            return new int[] { i, kvs[complement] };
+        }
+    }
+    return new int[] { 0, 0 };
+}
+
+
+作者：DaWuFanCn
+链接：https://leetcode.cn/problems/two-sum/solution/leetcode-1-two-sum-liang-shu-zhi-he-c-ha-xi-biao-d/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 
 
 ## [2]addTwoNumbers
@@ -180,6 +239,42 @@ public:
             l2->next = tempNode;
             return out2;
         }
+    }
+};
+```
+
+## [3]lengthOfLongestSubstring
+
+```c++
+/*
+在遍历字符串时，用哈希表存储字符和其下标，并判断是否重复，根据此更新最长子串状态和当前记录的子串状态
+时间O(n)
+空间O(n)
+*/
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> uniqueStr;
+        int maxLength = 0, startOfString = 0, endOfString = 0, currentLength = endOfString - startOfString;
+        for(int i = 0; i < s.length(); ++i) {
+            endOfString = i;//当前子串结尾下标 
+            if (uniqueStr.find(s[i]) != uniqueStr.end()) {//字符重复（已遍历过且加进了哈希表）
+                if (uniqueStr[s[i]] >= startOfString) {//有效重复（重点1）
+                    startOfString = uniqueStr[s[i]] + 1;//更新当前子串的开头
+                    currentLength = endOfString - startOfString + 1;//更新当前长度
+                }
+                else {//无效重复
+                    currentLength += 1;
+                }
+                uniqueStr[s[i]] = i;//更新重复字符的最新（近）下标（重点2）
+            }
+            else {
+                uniqueStr[s[i]] = i;//第一次遍历到，则插入哈希表
+                currentLength += 1;//更新当前长度
+            }
+            if (currentLength > maxLength) maxLength = currentLength;//更新最大长度
+        }
+        return maxLength;
     }
 };
 ```
