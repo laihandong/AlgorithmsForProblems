@@ -8,9 +8,7 @@
 
 你可以按任意顺序返回答案。
 
-来源：力扣（LeetCode）
-链接：https://leetcode.cn/problems/two-sum
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
 
 
 
@@ -134,10 +132,6 @@ public int[] TwoSum(int[] nums, int target)
 请你将两个数相加，并以相同形式返回一个表示和的链表。
 
 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
-
-来源：力扣（LeetCode）
-链接：https://leetcode.cn/problems/add-two-numbers
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 
 
@@ -301,6 +295,34 @@ public:
             ascii[s[i]] = i + 1;//更新（重复）字符最新下标（重点4）
         }
         return maxLen;
+    }
+};
+```
+
+## [4]findMedianSortedArrays
+
+给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+
+算法的时间复杂度应该为 O(log (m+n)) 
+
+
+
+提示：
+
+- nums1.length == m
+- nums2.length == n
+- 0 <= m <= 1000
+- 0 <= n <= 1000
+- 1 <= m + n <= 2000
+- -106 <= nums1[i], nums2[i] <= 106
+
+
+
+```c++
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+            
     }
 };
 ```
