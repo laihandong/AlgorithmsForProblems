@@ -1,14 +1,24 @@
+---
+
+---
+
+[TOC]
+
+
+
 # Leetcode Problems
 
-## [1]twoSum
+刷leetcode上的题只是一个提升思维能力的手段，在接下来的旅途中，不要过于纠结具体某道题解，主要锻炼头脑思维能力。
+
+## 1~100
+
+### [1]twoSum
 
 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
 
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
 
-你可以按任意顺序返回答案。
-
-
+你可以按任意顺序返回答案[^1]。
 
 
 
@@ -125,7 +135,7 @@ public int[] TwoSum(int[] nums, int target)
 
 
 
-## [2]addTwoNumbers
+### [2]addTwoNumbers
 
 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
 
@@ -237,7 +247,7 @@ public:
 };
 ```
 
-## [3]lengthOfLongestSubstring
+### [3]lengthOfLongestSubstring
 
 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
 
@@ -299,7 +309,7 @@ public:
 };
 ```
 
-## [4]findMedianSortedArrays
+### [4]findMedianSortedArrays
 
 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
 
@@ -504,3 +514,49 @@ public:
 };
 ```
 
+
+
+
+
+### [5]longestPalindrome
+
+但是以下内容有bug，就是给索引使用`unsigned int`时，当为0且进行`--`操作后，会等于一个很大的正数：4294967295，而不是-1，于是会报错；
+
+而且会超出时间限制；
+
+```c++\
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        //穷举法
+        uint len_s = s.length();
+        for (uint len_assumed = len_s; len_assumed >= 1; len_assumed--) {
+            for ( uint number_of_results = len_s + 1 - len_assumed; number_of_results >= 1; number_of_results--) {
+                for ( uint section_index_start = number_of_results - 1; section_index_start >= 0; section_index_start--) {
+                    uint iter_index_start = section_index_start, iter_index_end = section_index_start + len_assumed - 1;
+                    while (iter_index_start <= iter_index_end) {
+                        if (s[iter_index_start] == s[iter_index_end]) { 
+                            iter_index_start++; iter_index_end--; 
+                        } else {
+                            break;
+                        }
+                    }
+                    if (iter_index_start > iter_index_end) { 
+                        return s.substr(section_index_start, len_assumed); 
+                    }
+                }
+                
+            }
+            
+        }
+        return s.substr(0,1);
+    }
+};
+```
+
+
+
+
+# 脚注
+
+[^1]: 
