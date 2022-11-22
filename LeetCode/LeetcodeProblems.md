@@ -1,14 +1,24 @@
+---
+
+---
+
+[TOC]
+
+
+
 # Leetcode Problems
 
-## [1]twoSum
+刷leetcode上的题只是一个提升思维能力的手段，在接下来的旅途中，不要过于纠结具体某道题解，主要锻炼头脑思维能力。
+
+## 1~100
+
+### [1]twoSum
 
 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
 
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
 
-你可以按任意顺序返回答案。
-
-
+你可以按任意顺序返回答案[^1]。
 
 
 
@@ -125,7 +135,7 @@ public int[] TwoSum(int[] nums, int target)
 
 
 
-## [2]addTwoNumbers
+### [2]addTwoNumbers
 
 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
 
@@ -237,7 +247,7 @@ public:
 };
 ```
 
-## [3]lengthOfLongestSubstring
+### [3]lengthOfLongestSubstring
 
 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
 
@@ -299,7 +309,7 @@ public:
 };
 ```
 
-## [4]findMedianSortedArrays
+### [4]findMedianSortedArrays
 
 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
 
@@ -504,3 +514,135 @@ public:
 };
 ```
 
+
+
+
+
+### [5]longestPalindrome
+
+#### 题目
+
+给你一个字符串 `s`，找到 `s` 中最长的回文子串。
+
+ 
+
+**示例 1：**
+
+```
+输入：s = "babad"
+输出："bab"
+解释："aba" 同样是符合题意的答案。
+```
+
+**示例 2：**
+
+```
+输入：s = "cbbd"
+输出："bb"
+```
+
+ 
+
+**提示：**
+
+- `1 <= s.length <= 1000`
+- `s` 仅由数字和英文字母组成
+
+
+
+#### 第一次尝试
+
+##### 初步理解
+
+题目要求从字符串中找子集，子集的特性是对称，可以从子集的特点出发，求解
+
+子集的特点：
+
++ 对称（不论奇偶）
++ 连续（使子集长度和可能的数量能够*对应*）：比如`s`长度为10，子集长度如果为9，那么可能的数量为 2，在这两种情况中求解
++ 最大长度就是`s`本身，最小长度的情况就是单个字符
+
+
+
+##### 代码
+
+```c++\
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        //穷举法：从最长的子集长度开始，判断每一种可能性
+        uint len_s = s.length();
+        for (uint len_assumed = len_s; len_assumed >= 1; len_assumed--) {
+            for ( uint number_of_results = len_s + 1 - len_assumed; number_of_results >= 1; number_of_results--) {
+            	
+                for ( uint section_index_start = number_of_results - 1; section_index_start >= 0; section_index_start--) {
+                    uint iter_index_start = section_index_start, iter_index_end = section_index_start + len_assumed - 1;
+                    while (iter_index_start <= iter_index_end) {
+                        if (s[iter_index_start] == s[iter_index_end]) { 
+                            iter_index_start++; iter_index_end--; 
+                        } else {
+                            break;
+                        }
+                    }
+                    if (iter_index_start > iter_index_end) { 
+                        return s.substr(section_index_start, len_assumed); 
+                    }
+                }
+                
+            }
+            
+        }
+        return s.substr(0,1);
+    }
+};
+```
+
+##### 提交情况
+
+【bug】给索引使用`unsigned int`时，当为0且进行`--`操作后，会等于一个很大的正数：4294967295，而不是-1，于是会报错；
+
+【未通过】提示超出时间限制；
+
+【效率】时间复杂度O(n^3^)，空间复杂度O(1)
+
+##### 优化方法
+
+```c++
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        //穷举法
+        unsigned int len_s = s.length();
+        for ( int len_assumed = len_s; len_assumed >= 1; len_assumed--) {
+            for ( int number_of_results = len_s + 1 - len_assumed, section_index_start = 0; number_of_results >= 1; number_of_results--, section_index_start++) {
+                int iter_index_start = section_index_start, iter_index_end = section_index_start + len_assumed - 1;
+                while (iter_index_start <= iter_index_end) {
+                    if (s[iter_index_start] == s[iter_index_end]) {
+                        iter_index_start++; iter_index_end--;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                if (iter_index_start > iter_index_end) {
+                    return s.substr(section_index_start, len_assumed);
+                }
+            }
+        }
+        return s.substr(0, 1);
+    }
+};
+```
+
+【优化】将第三层循环给融合进第二层循环中了
+
+#### 他人解法
+
+
+
+
+
+
+# 脚注
+
+[^1]: 
